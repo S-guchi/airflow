@@ -22,11 +22,9 @@ services:
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
       AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-      AIRFLOW__WEBSERVER__SECRET_KEY: 'airflow_secret_key'
-      _AIRFLOW_DB_MIGRATE: 'true'
-      _AIRFLOW_WWW_USER_CREATE: 'true'
-      _AIRFLOW_WWW_USER_USERNAME: airflow
-      _AIRFLOW_WWW_USER_PASSWORD: airflow
+      AIRFLOW__API__SECRET_KEY: 'airflow_secret_key'
+      _AIRFLOW_STANDALONE_ADMIN_USERNAME: airflow
+      _AIRFLOW_STANDALONE_ADMIN_PASSWORD: airflow
     volumes:
       - ./dags:/opt/airflow/dags
       - ./logs:/opt/airflow/logs
@@ -39,8 +37,7 @@ services:
     restart: always
     command: >
       bash -c "airflow db migrate &&
-               airflow users create --username airflow --password airflow --firstname Admin --lastname User --role Admin --email admin@example.com || true &&
-               airflow webserver & airflow scheduler"
+               airflow standalone"
 
 volumes:
   postgres-db-volume:
